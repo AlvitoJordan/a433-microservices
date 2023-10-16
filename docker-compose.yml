@@ -1,19 +1,31 @@
+# Menggunakan Docker Compose versi 3.7
 version: "3.7"
 
+# Tempat untuk mendefinisikan service yang akan digunakan
 services:
+  # service pertama adalah item-app 
   item-app:
+    # Gunakan gambar item-app dari GitHub Packages
     image: ghcr.io/alvitojordan/item-app:v1
+    # Melakukan Port Mapping agar dapat diakses dari port 80 di host
     ports:
       - 80:8080
+    # Memastikan item-app hanya berjalan setelah item-db
     depends_on:
       - item-db
+    # restart policy agar container selalu melakukan restart ketika terhenti
     restart: always
-
+  # service kedua adalah item-db
   item-db:
+    # Gunakan gambar mongo:3 dari Docker Hub
     image: mongo:3
+    # Menggunakan volume app-db dengan target /data/db di container
     volumes:
       - app-db:/data/db
+    # restart policy agar container selalu melakukan restart ketika terhenti
     restart: always
 
+# Tempat mendeklarasi volume
 volumes:
+  # Membuat satu buah volume bernama app-db
   app-db:

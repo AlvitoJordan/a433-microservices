@@ -10,17 +10,17 @@ docker images
 echo
 echo
 
-# Mengubah nama image agar sesuai dengan format github packages
+# Mengubah nama image agar sesuai dengan format GitHub Packages
 docker tag item-app:v1 ghcr.io/alvitojordan/item-app:v1
 echo
 echo
 
-# Login ke Docker Hub
+# Login ke GitHub Packages
 echo $GITHUB_PACKAGES_TOKEN | docker login ghcr.io -u alvitojordan --password-stdin
 echo
 echo
 
-# Mengunggah image ke Docker Hub
+# Mengunggah image ke GitHub Packages
 docker push ghcr.io/alvitojordan/item-app:v1
 echo
 echo
