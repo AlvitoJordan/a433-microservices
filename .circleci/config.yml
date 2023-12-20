@@ -27,6 +27,7 @@ jobs:
       - run:
           name: Build and Push Image
           command: |
+            #!/bin/bash
             docker build -t karsajobs:latest .
             docker tag karsajobs:latest ghcr.io/alvitojordan/karsajobs:latest
             echo $GITHUB_PACKAGES_TOKEN | docker login ghcr.io -u alvitojordan --password-stdin
