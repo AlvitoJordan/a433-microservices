@@ -1,45 +1,45 @@
 version: 2.1
-
+executors:
+  docker-executor:
+    docker:
+      - image: circleci/golang:1.16
 jobs:
   lint-dockerfile:
-    docker:
-      - image: hadolint/hadolint:latest
+    executor: docker-executor
     steps:
       - checkout
+      - run:
+          name: Install hadolint
+          command: |
+            sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Linux-x86_64 &&\
+            sudo chmod +x /bin/hadolint
       - run:
           name: Lint Dockerfile
-          command: |
-            hadolint Dockerfile
-
+          command: hadolint Dockerfile
   test-app:
-    docker:
-      - image: golang:latest
+    executor: docker-executor
     steps:
       - checkout
       - run:
-          name: Run Backend Unit Tests
-          command: |
-            go test -v -short --count=1 $(go list ./...)
-
+          name: Run unit tests
+          command: go test -v -short --count=1 $(go list ./...)
   build-app-karsajobs:
-    docker:
-      - image: golang:latest
+    executor: docker-executor
     steps:
       - checkout
+      - setup_remote_docker
       - run:
-          name: Build and Push Image
+          name: Build and push Docker image
           command: |
-            # Your build and push commands for karsajobs image here
-            # Example: docker build -t your-image-name:latest .
-            #          docker push your-image-name:latest
-
+            export GITHUB_PACKAGES_TOKEN=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
+            echo $GITHUB_PACKAGES_TOKEN | docker login ghcr.io -u alvitojordan --password-stdin
+            docker build -t karsajobs:latest .
+            docker tag karsajobs:latest ghcr.io/alvitojordan/karsajobs:latest
+            docker push ghcr.io/alvitojordan/karsajobs:latest
 workflows:
   version: 2
-  karsajobs_workflow:
+  build-deploy:
     jobs:
       - lint-dockerfile
       - test-app
-      - build-app-karsajobs:
-          requires:
-            - lint-dockerfile
-            - test-app
+      - build-app-karsajobs
