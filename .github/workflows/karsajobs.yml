@@ -18,7 +18,7 @@ jobs:
           submodules: recursive
 
       - name: Login GitHub Packages
-        run: echo ${{ secrets.PACKAGE_TOKEN }} | docker login ghcr.io -u ${{secrets.USERNAME}} --password-stdin
+        run: echo ${{ secrets.PACKAGES_TOKEN }} | docker login ghcr.io -u ${{secrets.USERNAME}} --password-stdin
 
       - name: lint-dockerfile
         uses: hadolint/hadolint-action@v3.1.0
