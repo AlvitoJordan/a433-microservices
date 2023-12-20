@@ -3,14 +3,12 @@ version: 2.1
 jobs:
   lint-dockerfile:
     docker:
-      - image: hadolint/hadolint:latest
+      - image: hadolint/hadolint:latest-debian
     steps:
       - checkout
       - run:
           name: Lint Dockerfile
-          command: |
-            hadolint Dockerfile
-
+          command: hadolint Dockerfile
   test-app:
     docker:
       - image: golang:latest
