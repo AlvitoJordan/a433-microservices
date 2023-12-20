@@ -1,0 +1,45 @@
+version: 2.1
+
+jobs:
+  lint-dockerfile:
+    docker:
+      - image: hadolint/hadolint:latest
+    steps:
+      - checkout
+      - run:
+          name: Lint Dockerfile
+          command: |
+            hadolint Dockerfile
+
+  test-app:
+    docker:
+      - image: golang:latest
+    steps:
+      - checkout
+      - run:
+          name: Run Backend Unit Tests
+          command: |
+            go test -v -short --count=1 $(go list ./...)
+
+  build-app-karsajobs:
+    docker:
+      - image: golang:latest
+    steps:
+      - checkout
+      - run:
+          name: Build and Push Image
+          command: |
+            # Your build and push commands for karsajobs image here
+            # Example: docker build -t your-image-name:latest .
+            #          docker push your-image-name:latest
+
+workflows:
+  version: 2
+  karsajobs_workflow:
+    jobs:
+      - lint-dockerfile
+      - test-app
+      - build-app-karsajobs:
+          requires:
+            - lint-dockerfile
+            - test-app
