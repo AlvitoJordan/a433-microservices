@@ -1,0 +1,34 @@
+version: 2.1
+
+jobs:
+  lint-dockerfile:
+    docker:
+      - image: hadolint/hadolint:latest
+    steps:
+      - checkout
+      - run:
+          name: Lint Dockerfile
+          command: |
+            hadolint Dockerfile
+
+  build-app-karsajobs-ui:
+    docker:
+      - image: node:latest
+    steps:
+      - checkout
+      - run:
+          name: Build and Push Image
+          command: |
+            # Your build and push commands for karsajobs-ui image here
+            # Example: npm install && npm run build
+            #          docker build -t your-image-name:latest .
+            #          docker push your-image-name:latest
+
+workflows:
+  version: 2
+  karsajobs_ui_workflow:
+    jobs:
+      - lint-dockerfile
+      - build-app-karsajobs-ui:
+          requires:
+            - lint-dockerfile
