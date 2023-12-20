@@ -23,6 +23,12 @@ jobs:
       - run:
           name: Run unit tests
           command: go test -v -short --count=1 $(go list ./...)
+  - name: Login to GHCR
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ secrets.AlvitoJordan }}
+        password: ${{ secrets.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 }}
   build-app-karsajobs:
     executor: docker-executor
     steps:
@@ -31,7 +37,6 @@ jobs:
       - run:
           name: Build and push Docker image
           command: |
-            echo "$GITHUB_PACKAGES_TOKEN" | docker login ghcr.io -u alvitojordan --password-stdin
             docker build -t karsajobs:latest .
             docker tag karsajobs:latest ghcr.io/alvitojordan/karsajobs:latest
             docker push ghcr.io/alvitojordan/karsajobs:latest
