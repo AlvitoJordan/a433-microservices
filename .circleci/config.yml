@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   lint-dockerfile:
     docker:
-      - image: hadolint/hadolint:latest-debian
+      - image: hadolint/hadolint:latest
     steps:
       - checkout
       - run:
@@ -24,10 +24,10 @@ jobs:
       - image: golang:latest
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: Build and Push Image
           command: |
-            #!/bin/bash
             docker build -t karsajobs:latest .
             docker tag karsajobs:latest ghcr.io/alvitojordan/karsajobs:latest
             echo $GITHUB_PACKAGES_TOKEN | docker login ghcr.io -u alvitojordan --password-stdin
