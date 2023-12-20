@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   lint-dockerfile:
     docker:
-      - image: hadolint/hadolint:latest
+      - image: hadolint:latest
     steps:
       - checkout
       - run:
