@@ -28,6 +28,7 @@ jobs:
       - run:
           name: Build and Push Image
           command: |
+            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
             docker build -t karsajobs:latest .
             docker tag karsajobs:latest ghcr.io/alvitojordan/karsajobs:latest
             echo $GITHUB_PACKAGES_TOKEN | docker login ghcr.io -u alvitojordan --password-stdin
