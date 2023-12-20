@@ -1,49 +1,46 @@
 version: 2.1
-executors:
-  docker-executor:
-    docker:
-      - image: circleci/golang:1.16
+
 jobs:
   lint-dockerfile:
-    executor: docker-executor
+    docker:
+      - image: hadolint/hadolint:latest
     steps:
       - checkout
-      - run:
-          name: Install hadolint
-          command: |
-            sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Linux-x86_64 &&\
-            sudo chmod +x /bin/hadolint
       - run:
           name: Lint Dockerfile
-          command: hadolint Dockerfile
+          command: |
+            hadolint Dockerfile
+
   test-app:
-    executor: docker-executor
+    docker:
+      - image: golang:latest
     steps:
       - checkout
       - run:
-          name: Run unit tests
-          command: go test -v -short --count=1 $(go list ./...)
-  - name: Login to GHCR
-      uses: docker/login-action@v1
-      with:
-        registry: ghcr.io
-        username: ${{ secrets.AlvitoJordan }}
-        password: ${{ secrets.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 }}
+          name: Run Backend Unit Tests
+          command: |
+            go test -v -short --count=1 $(go list ./...)
+
   build-app-karsajobs:
-    executor: docker-executor
+    docker:
+      - image: golang:latest
     steps:
       - checkout
-      - setup_remote_docker
       - run:
-          name: Build and push Docker image
+          name: Build and Push Image
           command: |
             docker build -t karsajobs:latest .
             docker tag karsajobs:latest ghcr.io/alvitojordan/karsajobs:latest
+            echo $GITHUB_PACKAGES_TOKEN | docker login ghcr.io -u alvitojordan --password-stdin
             docker push ghcr.io/alvitojordan/karsajobs:latest
+
 workflows:
   version: 2
-  build-deploy:
+  karsajobs_workflow:
     jobs:
       - lint-dockerfile
       - test-app
-      - build-app-karsajobs
+      - build-app-karsajobs:
+          requires:
+            - lint-dockerfile
+            - test-app
