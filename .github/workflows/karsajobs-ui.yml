@@ -2,7 +2,7 @@ name: karsajobs-ui-ci
 on:
   push:
     branches:
-      - karsajobs
+      - karsajobs-ui
     release:
       types: [published]
 jobs:
