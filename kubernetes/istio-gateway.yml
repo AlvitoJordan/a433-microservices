@@ -1,0 +1,33 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-gateway # Nama untuk gateway Istio
+spec:
+  selector:
+    istio: ingressgateway # Selector yang menargetkan gateway ingress
+  servers:
+    - port:
+        number: 80 # Nomor port yang digunakan
+        name: http # Nama Port
+        protocol: HTTP # Protokol yang digunakan
+      hosts:
+        - "*" # Host yang diizinkan, dalam hal ini semuanya
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: istio # Nama untuk virtual service
+spec:
+  hosts:
+    - "*" # Host yang diizinkan, dalam hal ini semuanya
+  gateways:
+    - istio-gateway # Menggunakan gateway istio-gateway untuk rute lalu lintas
+  http:
+    - match:
+        - uri:
+            exact: /order # Mencocokkan permintaan dengan URI "/order"
+      route:
+        - destination:
+            host: order-service # Menuju host dengan nama order-service
+            port:
+              number: 3000 # Mengarahkan ke port 3000 pada host order-service

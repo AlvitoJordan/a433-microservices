@@ -1,0 +1,10 @@
+NAME             READY   STATUS    RESTARTS   AGE
+pod/rabbitmq-0   2/2     Running   0          65s
+
+NAME                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                                 AGE
+service/kubernetes          ClusterIP   10.96.0.1       <none>        443/TCP                                 108s
+service/rabbitmq            ClusterIP   10.106.47.140   <none>        5672/TCP,4369/TCP,25672/TCP,15672/TCP   65s
+service/rabbitmq-headless   ClusterIP   None            <none>        4369/TCP,5672/TCP,25672/TCP,15672/TCP   65s
+
+NAME                        READY   AGE
+statefulset.apps/rabbitmq   1/1     65s

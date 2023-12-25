@@ -1,0 +1,23 @@
+Cek Helm (apakah sudah terinstall atau belum) :
+helm
+
+Cek List Helm :
+helm list
+
+Search Repo RabbitMQ :
+helm search repo rabbitmq
+
+Tambahkan repo bitnami :
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+Update Repo :
+helm repo update
+
+Install Rabbitmq :
+helm install rabbitmq bitnami/rabbitmq –set auth.username=guest,auth.password=guest
+
+Cek Status Rabbitmq :
+helm status rabbitmq
+
+Untuk menjalankan RabbitMQ interface :
+kubectl port-forward --namespace default svc/rabbitmq 15672:15672

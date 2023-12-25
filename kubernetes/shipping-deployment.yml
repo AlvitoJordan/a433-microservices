@@ -1,0 +1,60 @@
+#Versi API yang digunakan
+apiVersion: apps/v1
+
+# Jenis objek yang dibuat. Dalam hal ini Deployment
+kind: Deployment
+
+# Metadata untuk objek deployment
+metadata:
+
+  # nama deployment
+  name: shipping-service
+
+# Spesifikasi deployment
+spec:
+
+  # Jumlah replica pod yang diinginkan
+  replicas: 1
+
+  # Selector label untuk pod
+  selector:
+    matchLabels:
+      app: shipping-service
+
+  # Template untuk pod yang akan dibuat
+  template:
+
+    # Metadata untuk pod
+    metadata:
+
+      # Label yang diterapkan pada pod
+      labels:
+        app: shipping-service
+
+    # Spesifikasi dari pod
+    spec:
+
+      # Container yang akan digunakan di pod
+      containers:
+
+      # Nama container
+      - name: shipping-service
+
+        # Image Docker yang digunakan
+        image: ghcr.io/alvitojordan/shipping-service:latest
+
+        # menentukan kebijakan. IfNotPresent berarti image hanya akan diunduh bila tidak tersedia secara lokal
+        imagePullPolicy: IfNotPresent
+
+        # Port yang akan digunakan oleh container
+        ports:
+        - containerPort: 3001
+
+        # List Environment Variabel
+        env:
+
+        # Nama Environment Variabel (AMQP_URL)
+        - name: AMQP_URL
+
+        # Nama Environment Variabel (AMQP_URL) dengan format amqp://username:password@rabbitmq-service-name.namespace:port
+          value: "amqp://guest:guest@rabbitmq.default:5672"

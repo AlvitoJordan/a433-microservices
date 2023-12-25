@@ -1,0 +1,33 @@
+# Versi API yang digunakan
+apiVersion: v1
+
+# Jenis objek yang dibuat. Dalam hal ini Service
+kind: Service
+
+# Metadata untuk objek Service
+metadata:
+
+  # Nama Service
+  name: shipping-service
+
+  # Label untuk objek Service
+  labels:
+
+    # Label app dengan nilai shipping-service
+    app: shipping-service
+
+# Spesifikasi dari Service
+spec:
+
+  # Port yang digunakan
+  ports:
+
+  # Port yang akan diekspos oleh container
+  - port: 3001
+
+  # Selector untuk menentukan pod yang akan digunakan
+  selector:
+    app: shipping-service
+
+  # Jenis Service (Nodeport membuat Service dapat diakses dari luar Cluster)
+  type: NodePort
